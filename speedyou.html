@@ -108,12 +108,12 @@
             const videoId = getYouTubeID(videoUrl);
             const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
             document.getElementById('videoPlayer').innerHTML = `<iframe id="player" width="560" height="315" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
-            player = new YT.Player('player');
         });
 
         function setSpeed(speed) {
-            if (player) {
-                player.setPlaybackRate(speed);
+            const video = document.querySelector('.html5-main-video');
+            if (video) {
+                video.playbackRate = speed;
             }
         }
 
@@ -130,7 +130,5 @@
             return (match && match[7].length === 11) ? match[7] : false;
         }
     </script>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
