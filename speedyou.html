@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        #videoPlayer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #speedControls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #speedControls button {
+            margin: 5px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        #speedControls button:hover {
+            background-color: #45a049;
+        }
+
+        #speedControls button:focus {
+            outline: none;
+        }
+
+        #speedControls button:active {
+            background-color: #3e8e41;
+        }
+
+        input[type="text"],
+        button[type="submit"] {
+            padding: 8px 16px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            margin-right: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        button[type="submit"]:focus {
+            outline: none;
+        }
+
+        button[type="submit"]:active {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <h1>YouTube Video Player</h1>
+    <form id="videoForm">
+        <label for="videoUrl">Enter YouTube Video URL:</label>
+        <input type="text" id="videoUrl" name="videoUrl">
+        <button type="submit">Play Video</button>
+    </form>
+    <div id="videoPlayer"></div>
+    <div id="speedControls">
+        <button onclick="setSpeed(0.5)">0.5x</button>
+        <button onclick="setSpeed(1)">1x</button>
+        <button onclick="setSpeed(1.5)">1.5x</button>
+        <button onclick="setSpeed(2)">2x</button>
+        <button onclick="setCustomSpeed()">Custom Speed</button>
+    </div>
+
+    <script>
+        document.getElementById('videoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const videoUrl = document.getElementById('videoUrl').value;
+            const videoId = getYouTubeID(videoUrl);
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+            document.getElementById('videoPlayer').innerHTML = `<iframe id="player" width="560" height="315" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+            player = new YT.Player('player');
+        });
+
+        function setSpeed(speed) {
+            if (player) {
+                player.setPlaybackRate(speed);
+            }
+        }
+
+        function setCustomSpeed() {
+            var customSpeed = prompt("Enter custom speed:");
+            if (customSpeed !== null) {
+                setSpeed(parseFloat(customSpeed));
+            }
+        }
+
+        function getYouTubeID(url) {
+            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[7].length === 11) ? match[7] : false;
+        }
+    </script>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
