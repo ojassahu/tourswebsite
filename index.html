@@ -3,57 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        Demo Tour</title>
-    <link rel="stylesheet" href="style.css">
+    <title>YouTube Video Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        #videoPlayer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #speedControls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #speedControls button {
+            margin: 5px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        #speedControls button:hover {
+            background-color: #45a049;
+        }
+
+        #speedControls button:focus {
+            outline: none;
+        }
+
+        #speedControls button:active {
+            background-color: #3e8e41;
+        }
+
+        input[type="text"],
+        button[type="submit"] {
+            padding: 8px 16px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            margin-right: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        button[type="submit"]:focus {
+            outline: none;
+        }
+
+        button[type="submit"]:active {
+            background-color: #3e8e41;
+        }
+    </style>
 </head>
 <body>
-    <div id="top">
-        <section>
-            <div class="menu">
-                <ul>
-                    
-                    <li> <a href="#">Home</a></li>
-                    <li> <a href="#">Countiers</a></li>
-                    <li> <a href="#">Price</a></li>
-                    <li> <a href="#">Visa</a></li>
-                </ul>
-            </div>
-        </section>
-        <section>
-            <div id="text">
-                Toursim
-            </div>
-        </section>
+    <h1>YouTube Video Player</h1>
+    <form id="videoForm">
+        <label for="videoUrl">Enter YouTube Video URL:</label>
+        <input type="text" id="videoUrl" name="videoUrl">
+        <button type="submit">Play Video</button>
+    </form>
+    <div id="videoPlayer"></div>
+    <div id="speedControls">
+        <button onclick="setSpeed(0.5)">0.5x</button>
+        <button onclick="setSpeed(1)">1x</button>
+        <button onclick="setSpeed(1.5)">1.5x</button>
+        <button onclick="setSpeed(2)">2x</button>
+        <button onclick="setCustomSpeed()">Custom Speed</button>
     </div>
-    <br><br><br>
-    <p>
-        Discover our Trip Planner
-    </p>
-    <section class="middle">
-        <!-- planes -->
-        <div class="box">
-         <div class="tourplan" id="tp1"><img src="image/adv.jpeg" alt=""></div>
-         <div class="tourplan" id="tp2"><img src="image/hot.jpeg" alt=""></div>
-         <div class="tourplan" id="tp3"><img src="image/mon.jpeg" alt=""></div></div>
-    </section> <br><br><br>
-    <section id="content">
-        <h1> Welcome to Demo Tours and travels</h1>
-        <br>
-        <p>
-            At <b>Demo Tours and Travels</b>, we believe that travel is not just about visiting new places but about experiencing new cultures, meeting different people, and creating memories that last a lifetime. Our mission is to provide you with the most comprehensive, complete, and personalized travel experience possible.
-        </p>
-        <br>
-        <br>
-        <h1>Our Services</h1><br>
-        <p>We offer a wide range of services tailored to your unique needs and preferences. From booking flights and accommodations to arranging sightseeing tours and special experiences, our team of dedicated professionals is here to ensure your journey is as smooth and enjoyable as possible.</p>
-    </section>
-    <section id="last">
-        <!-- last part -->
-        <hr color="black" ><br>
-        <p>Ready to start planning your next trip? Contact us today and let Demo Tours and Travels turn your travel dreams into reality. <br>
-        <textarea maxlength="2000"></textarea></p>
 
-    </section>
+    <script>
+        document.getElementById('videoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const videoUrl = document.getElementById('videoUrl').value;
+            const videoId = getYouTubeID(videoUrl);
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+            document.getElementById('videoPlayer').innerHTML = `<iframe id="player" width="560" height="315" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+            player = new YT.Player('player');
+        });
+
+        function setSpeed(speed) {
+            if (player) {
+                player.setPlaybackRate(speed);
+            }
+        }
+
+        function setCustomSpeed() {
+            var customSpeed = prompt("Enter custom speed:");
+            if (customSpeed !== null) {
+                setSpeed(parseFloat(customSpeed));
+            }
+        }
+
+        function getYouTubeID(url) {
+            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[7].length === 11) ? match[7] : false;
+        }
+    </script>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
